@@ -1,0 +1,14 @@
+const Login = () => {
+  return (
+    <div>
+      <h1 class="text-center text-xl md:text-4xl my-4 font-bold ">Login</h1>
+      <form>
+        <input type="text" placeholder="Username" />
+        <input type="password" placeholder="Password" />
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  );
+};
+
+export default Login;
