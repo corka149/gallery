@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="shortcut icon" type="image/ico" href="{{ url_for('static', path='/img/favicon.ico') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}">
+  <title>Gallery</title>
+</head>
+
+<body>
+  <div id="content" class="h-screen flex flex-col justify-between">
+
+    <div class="bg-amber-400 flex justify-center" style="min-height: 10vh">
+      <!-- Navbar -->
+      {%block navbar %}
+      <nav class="flex items-center justify-between w-1/2 mx-4">
+        <img src="{{ url_for('static', path='/img/logo.png') }}" alt="Sun rises behind a mountain" class="max-h-24" />
+        <span class="text-center text-xl my-4 font-bold italic text-amber-900">Gallery</span>
+        <ul class="flex space-x-4">
+          <li>
+            <a href="/" class="underline text-amber-900">Home</a>
+          </li>
+          <li>
+            <a href="/images/add" class="underline text-amber-900">Add Image</a>
+          </li>
+          <li>
+            <a href="/login" class="underline text-amber-900">Login</a>
+          </li>
+          <li>
+            <button type="button" class="underline text-amber-900 cursor-pointer">Logout</button>
+          </li>
+        </ul>
+      </nav>
+      {% endblock %}
+    </div>
+
+    <main class="mx-auto max-w-xl mt-4" style="min-height: 80vh">
+      <!-- Content -->
+      {% block content %}{% endblock %}
+    </main>
+      
+    <div class="bg-gray-500" style="min-height: 5vh">
+      <!-- Footer -->
+      {% block footer %}
+      <div class="mx-auto max-w-xl">
+        <footer>
+          <p>Footer</p>
+        </footer>
+      </div>
+      {% endblock %}
+    </div>
+
+  </div>
+</body>
+
+</html>
