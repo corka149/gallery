@@ -5,6 +5,11 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+import gallery.config as config
+import gallery.db as db
+
+config = config.load()
+db.init(config)
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
