@@ -1,10 +1,9 @@
-import gallery.config as config
-
 from datetime import datetime
 from typing import Optional
 
 from sqlmodel import Field, Session, SQLModel, create_engine
 
+import gallery.config as config
 
 engine = None
 

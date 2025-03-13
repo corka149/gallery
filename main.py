@@ -1,41 +1,65 @@
-import uvicorn
+from typing import Annotated
 
-from fastapi import FastAPI, Request
+import uvicorn
+from fastapi import (Depends, FastAPI, File, Form, Request, UploadFile,
+                     responses, status)
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 import gallery.config as config
 import gallery.db as db
+from gallery.service import ImageService
 
 config = config.load()
 db.init(config)
+
 app = FastAPI()
-
 app.mount("/static", StaticFiles(directory="static"), name="static")
-
-
 templates = Jinja2Templates(directory="templates")
 
 
-@app.get("/home", response_class=HTMLResponse)
-async def home(request: Request):
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request, service: Annotated[ImageService, Depends()]):
+    images = service.get_images()
+    
     return templates.TemplateResponse(
         request=request, name="home.html.jinja", context={}
     )
 
 
 @app.get("/login", response_class=HTMLResponse)
-async def login_form(request: Request):
+def login_form(request: Request):
     return templates.TemplateResponse(
         request=request, name="login.html.jinja", context={}
     )
 
 
 @app.get("/images/add", response_class=HTMLResponse)
-async def add_image(request: Request):
+def add_image(request: Request):
     return templates.TemplateResponse(
         request=request, name="add_image.html.jinja", context={}
+    )
+
+
+@app.post("/images/add", response_class=HTMLResponse)
+def create_image(
+    image: Annotated[UploadFile, File()],
+    title: Annotated[str, Form()],
+    description: Annotated[str, Form()],
+    tags: Annotated[str, Form()],
+    service: Annotated[ImageService, Depends()],
+):
+    imageData = db.Image(
+        title=title,
+        description=description,
+        tags=tags,
+    )
+    
+    service.save(imageData, image)
+    
+    return responses.RedirectResponse(
+        url="/", status_code=status.HTTP_302_FOUND
     )
 
 
