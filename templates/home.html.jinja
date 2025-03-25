@@ -24,10 +24,10 @@
       </button>
     </div>
   </div>
-  {% endfor %} {% if images|length == 0 %}
-  <div class="text-center text-xl md:text-2xl my-4 font-bold">
-    No images found
-  </div>
-  {% endif %}
+  {% endfor %}
 </div>
-{% endblock %}
+{% if images|length == 0 %}
+<div class="text-center text-xl md:text-2xl my-4 mx-auto italic text-gray-500">
+  No images found
+</div>
+{% endif %} {% endblock %}

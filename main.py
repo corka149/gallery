@@ -1,6 +1,8 @@
 from typing import Annotated
 
 import uvicorn
+import alembic.config
+
 from fastapi import Depends, FastAPI, File, Form, Request, UploadFile, responses, status
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -12,6 +14,14 @@ from gallery.service import ImageService
 
 config = config.load()
 db.init(config)
+
+# Run migrations
+alembic.config.main(
+    argv=[
+        "upgrade",
+        "head",
+    ]
+)
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -72,7 +82,9 @@ def create_image(
 
 
 @app.get("/images/{image_id}/delete", response_class=HTMLResponse)
-def delete_image(request: Request, image_id: int, service: Annotated[ImageService, Depends()]):
+def delete_image(
+    image_id: int, service: Annotated[ImageService, Depends()]
+):
     service.delete(image_id)
     return responses.RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
 
