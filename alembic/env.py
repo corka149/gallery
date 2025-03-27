@@ -3,7 +3,7 @@ from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 
 from alembic import context
-from gallery.config import load as load_gallery_config
+from gallery.config import get_config as load_gallery_config
 
 gallery_config = load_gallery_config()
 

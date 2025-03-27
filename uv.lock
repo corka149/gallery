@@ -141,6 +141,7 @@ dependencies = [
     { name = "alembic" },
     { name = "fastapi", extra = ["standard"] },
     { name = "isort" },
+    { name = "itsdangerous" },
     { name = "jinja2" },
     { name = "pillow" },
     { name = "psycopg", extra = ["binary", "pool"] },
@@ -160,6 +161,7 @@ requires-dist = [
     { name = "alembic", specifier = ">=1.15.1" },
     { name = "fastapi", extras = ["standard"], specifier = ">=0.115.11" },
     { name = "isort", specifier = ">=6.0.1" },
+    { name = "itsdangerous", specifier = ">=2.2.0" },
     { name = "jinja2", specifier = ">=3.1.5" },
     { name = "pillow", specifier = ">=11.1.0" },
     { name = "psycopg", extras = ["binary", "pool"], specifier = ">=3.2.5" },
@@ -264,6 +266,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/b8/21/1e2a441f74a653a144224d7d21afe8f4169e6c7c20bb13aec3a2dc3815e0/isort-6.0.1.tar.gz", hash = "sha256:1cb5df28dfbc742e490c5e41bad6da41b805b0a8be7bc93cd0fb2a8a890ac450", size = 821955 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c1/11/114d0a5f4dabbdcedc1125dee0888514c3c3b16d3e9facad87ed96fad97c/isort-6.0.1-py3-none-any.whl", hash = "sha256:2dc5d7f65c9678d94c88dfc29161a320eec67328bc97aad576874cb4be1e9615", size = 94186 },
+]
+
+[[package]]
+name = "itsdangerous"
+version = "2.2.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/9c/cb/8ac0172223afbccb63986cc25049b154ecfb5e85932587206f42317be31d/itsdangerous-2.2.0.tar.gz", hash = "sha256:e0050c0b7da1eea53ffaf149c0cfbb5c6e2e2b69c4bef22c81fa6eb73e5f6173", size = 54410 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/04/96/92447566d16df59b2a776c0fb82dbc4d9e07cd95062562af01e408583fc4/itsdangerous-2.2.0-py3-none-any.whl", hash = "sha256:c6242fc49e35958c8b15141343aa660db5fc54d4f13a1db01a3f5891b98700ef", size = 16234 },
 ]
 
 [[package]]

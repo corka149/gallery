@@ -8,11 +8,13 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+from gallery.auth import Auth
 import gallery.config as config
 import gallery.db as db
 from gallery.service import ImageService
 
-config = config.load()
+
+config = config.get_config()
 db.init(config)
 
 # Run migrations
@@ -33,8 +35,29 @@ app.mount(
 templates = Jinja2Templates(directory="templates")
 
 
+class TemplateRenderer:
+    def __init__(self, request: Request, auth: Annotated[Auth, Depends()]):
+        self.auth = auth
+        self.request = request
+
+    def render(self, name: str, context: dict):
+        context["is_authenticated"] = False
+        if self.request.cookies.get("gallery"):
+            token = self.request.cookies.get("gallery")
+            username = self.auth.verify_token(token)
+            if username:
+                context["is_authenticated"] = True
+
+        return templates.TemplateResponse(
+            request=self.request, name=name, context=context
+        )
+
+
 @app.get("/", response_class=HTMLResponse)
-def home(request: Request, service: Annotated[ImageService, Depends()]):
+def home(
+    service: Annotated[ImageService, Depends()],
+    renderer: Annotated[TemplateRenderer, Depends()],
+):
     images = service.get_images()
 
     for image in images:
@@ -43,23 +66,53 @@ def home(request: Request, service: Annotated[ImageService, Depends()]):
             config.image_directory, config.gallery_endpoint
         )
 
-    return templates.TemplateResponse(
-        request=request, name="home.html.jinja", context={"images": images}
-    )
+    return renderer.render(name="home.html.jinja", context={"images": images})
 
 
 @app.get("/login", response_class=HTMLResponse)
-def login_form(request: Request):
-    return templates.TemplateResponse(
-        request=request, name="login.html.jinja", context={}
+def login_form(renderer: Annotated[TemplateRenderer, Depends()]):
+    return renderer.render(name="login.html.jinja", context={})
+
+
+@app.post("/login", response_class=HTMLResponse)
+def login(
+    username: Annotated[str, Form()],
+    password: Annotated[str, Form()],
+    auth: Annotated[Auth, Depends()],
+):
+    if not auth.verify(username, password):
+        return responses.RedirectResponse(
+            url="/login", status_code=status.HTTP_302_FOUND
+        )
+
+    response = responses.RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
+
+    token = auth.generate_token(username)
+
+    response.set_cookie(
+        key="gallery",
+        value=token,
+        max_age=3200,  # 60 minutes
+        httponly=True,
+        secure=config.mode.is_prod(),  # Only set secure cookies in production (Uses HTTPS)
+        samesite="Strict",
     )
+
+    return response
+
+
+@app.get("/logout", response_class=HTMLResponse)
+def logout():
+    response = responses.RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
+    response.delete_cookie(key="gallery")
+    return response
 
 
 @app.get("/images/add", response_class=HTMLResponse)
-def add_image(request: Request):
-    return templates.TemplateResponse(
-        request=request, name="add_image.html.jinja", context={}
-    )
+def add_image(
+    renderer: Annotated[TemplateRenderer, Depends()],
+):
+    return renderer.render(name="add_image.html.jinja", context={})
 
 
 @app.post("/images/add", response_class=HTMLResponse)
@@ -82,9 +135,7 @@ def create_image(
 
 
 @app.get("/images/{image_id}/delete", response_class=HTMLResponse)
-def delete_image(
-    image_id: int, service: Annotated[ImageService, Depends()]
-):
+def delete_image(image_id: int, service: Annotated[ImageService, Depends()]):
     service.delete(image_id)
     return responses.RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
 

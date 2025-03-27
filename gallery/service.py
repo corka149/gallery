@@ -17,7 +17,7 @@ import gallery.config as config
 class ImageService:
     def __init__(self, session: Annotated[Session, Depends(db.session)]):
         self.session = session
-        self.config = config.load()
+        self.config = config.get_config()
 
     def get_image(self, image_id):
         statement = select(db.Image).where(db.Image.id == image_id)
