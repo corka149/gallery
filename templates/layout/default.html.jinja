@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 
 <head>
   <meta charset="utf-8" />
@@ -18,19 +18,18 @@
       {%block navbar %}
       <nav class="flex items-center justify-between w-1/2 mx-4">
         <img src="{{ url_for('static', path='/img/logo.png') }}" alt="Sun rises behind a mountain" class="max-h-24" />
-        <span class="text-center text-xl my-4 font-bold italic text-amber-900">Gallery</span>
+        <span class="text-center text-xl my-4 font-bold italic text-amber-900">
+          <a href="/">Gallery</a>
+        </span>
         <ul class="flex space-x-4">
           <li>
-            <a href="/" class="underline text-amber-900">Home</a>
+            <a href="/images/add" class="underline text-amber-900">{{_("Add Image")}}</a>
           </li>
           <li>
-            <a href="/images/add" class="underline text-amber-900">Add Image</a>
+            <a href="/login" class="underline text-amber-900">{{_("Login")}}</a>
           </li>
           <li>
-            <a href="/login" class="underline text-amber-900">Login</a>
-          </li>
-          <li>
-            <a href="/logout" class="underline text-amber-900">Logout</a>
+            <a href="/logout" class="underline text-amber-900">{{_("Logout")}}</a>
           </li>
         </ul>
       </nav>

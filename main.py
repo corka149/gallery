@@ -1,3 +1,4 @@
+import gettext
 from typing import Annotated
 
 import uvicorn
@@ -32,6 +33,12 @@ app.mount(
     StaticFiles(directory=config.image_directory),
     name="images",
 )
+
+# Set up translations
+language_translations = gettext.translation("base", "locales", languages=["de", "en"])
+language_translations.install()
+_ = language_translations.gettext
+
 templates = Jinja2Templates(directory="templates")
 
 
@@ -41,6 +48,7 @@ class TemplateRenderer:
         self.request = request
 
     def render(self, name: str, context: dict):
+        context["_"] = _
         context["is_authenticated"] = False
         if self.request.cookies.get("gallery"):
             token = self.request.cookies.get("gallery")
