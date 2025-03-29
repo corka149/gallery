@@ -1,12 +1,7 @@
-from enum import Enum
 import os
+from enum import Enum
 
 from pydantic import BaseModel
-
-
-class AdminUser(BaseModel):
-    username: str
-    password: str
 
 
 class AuthConfig(BaseModel):
@@ -33,7 +28,6 @@ class Config(BaseModel):
     database_url: str
     image_directory: str
     gallery_endpoint: str
-    admin: AdminUser
     auth: AuthConfig
     mode: ReleaseMode
 
@@ -46,10 +40,6 @@ def get_config():
         ),
         image_directory=os.getenv("IMAGE_DIRECTORY", "/var/gallery/images"),
         gallery_endpoint=os.getenv("GALLERY_ENDPOINT", "/gallery/images"),
-        admin=AdminUser(
-            username=os.getenv("ADMIN_USERNAME", "admin"),
-            password=os.getenv("ADMIN_PASSWORD", "password"),
-        ),
         auth=AuthConfig(
             secret_token=os.getenv("AUTH_SECRET_TOKEN", "mysecret"),
             salt=os.getenv("AUTH_SALT", "mysalt"),

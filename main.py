@@ -2,18 +2,16 @@ import gettext
 from typing import Annotated
 
 import uvicorn
-import alembic.config
-
-from fastapi import Depends, FastAPI, File, Form, Request, UploadFile, responses, status
+from fastapi import (Depends, FastAPI, File, Form, Request, UploadFile,
+                     responses, status)
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from gallery.auth import Auth
+import alembic.config
 import gallery.config as config
 import gallery.db as db
-from gallery.service import ImageService
-
+from gallery.service import ImageService, AuthService as Auth
 
 config = config.get_config()
 db.init(config)
