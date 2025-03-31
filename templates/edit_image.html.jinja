@@ -1,16 +1,23 @@
 {% extends "layout/default.html.jinja" %} {% block content %}
 <div>
   <h1 class="text-center text-xl md:text-4xl my-4 font-bold">
-    {{ _("Add image") }}
+    {{ _("Edit image") }} {{ image.title }}
   </h1>
-  <form action="/images/add" method="post" enctype="multipart/form-data">
+  <form action="/images/{{image.id}}/edit" method="post" enctype="multipart/form-data">
     <div class="grid grid-cols-1 gap-4">
       <!-- Title -->
       <div>
         <label class="font-bold text-gray-500" for="title">{{
           _("Title")
         }}</label>
-        <input type="text" id="title" name="title" class="w-full" required />
+        <input
+          type="text"
+          id="title"
+          name="title"
+          class="w-full"
+          value="{{ image.title }}"
+          required
+        />
       </div>
       <!-- Description -->
       <div>
@@ -22,21 +29,40 @@
           name="description"
           class="w-full"
           required
-        ></textarea>
+        >{{ image.description }}</textarea>
       </div>
       <!-- Tags -->
       <div>
         <label class="font-bold text-gray-500" for="tags">{{
           _("Tags")
         }}</label>
-        <input type="text" id="tags" name="tags" class="w-full" required />
+        <input
+          type="text"
+          id="tags"
+          name="tags"
+          class="w-full"
+          value="{{ image.tags }}"
+          required
+        />
       </div>
+      <!-- Current image -->
+        <div>
+            <label class="font-bold text-gray-500" for="current_image">{{
+            _("Current image")
+            }}</label>
+            <img
+            src="{{ image.url }}"
+            alt="{{ image.title }}"
+            class="w-full h-auto"
+            />
+        </div>
       <!-- Image -->
       <div>
         <label class="font-bold text-gray-500" for="image">{{
           _("Image")
         }}</label>
-        <input type="file" id="image" name="image" class="w-full" required />
+        <input type="file" id="image" name="image" class="w-full" />
+        <div>{{_("Only place a image when you want to change it.")}}</div>
       </div>
       <!-- Submit -->
       <div>

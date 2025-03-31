@@ -15,13 +15,17 @@
     <div class="text-lg font-bold">{{ image.title }}</div>
     <div>{{ image.description }}</div>
     <div class="text-sm text-gray-500 italic">{{ image.tags }}</div>
-    <div class="mt-4">
+    <div class="mt-4 flex justify-between gap-2">
       <button
-        class="w-1/2 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-light text-white bg-red-300 hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+        class="w-1/2 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-xs font-light text-white bg-red-300 hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
         onclick="deleteImage('{{ image.id }}')"
+        >{{ _("Delete") }}</button
       >
-        {{ _("Delete") }}
-      </button>
+      <a
+        class="w-1/2 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-xs font-light text-white bg-green-300 hover:bg-green-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+        href="/images/{{ image.id }}/edit"
+        >{{ _("Edit") }}</a
+      >
     </div>
   </div>
   {% endfor %}

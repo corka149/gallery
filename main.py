@@ -140,6 +140,41 @@ def create_image(
     return responses.RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
 
 
+@app.get("/images/{image_id}/edit", response_class=HTMLResponse)
+def edit_image(
+    image_id: int,
+    renderer: Annotated[TemplateRenderer, Depends()],
+    service: Annotated[ImageService, Depends()],
+):
+    image = service.get_image(image_id)
+    image.url = image.url.replace(config.image_directory, config.gallery_endpoint)
+    image.thumbnail_url = image.thumbnail_url.replace(
+        config.image_directory, config.gallery_endpoint
+    )
+
+    return renderer.render(name="edit_image.html.jinja", context={"image": image})
+
+
+@app.post("/images/{image_id}/edit", response_class=HTMLResponse)
+def update_image(
+    image_id: int,
+    image: Annotated[UploadFile, File()],
+    title: Annotated[str, Form()],
+    description: Annotated[str, Form()],
+    tags: Annotated[str, Form()],
+    service: Annotated[ImageService, Depends()],
+):
+    imageData = service.get_image(image_id)
+    
+    imageData.title = title
+    imageData.description = description
+    imageData.tags = tags
+
+    service.save(imageData, image)
+
+    return responses.RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
+
+
 @app.get("/images/{image_id}/delete", response_class=HTMLResponse)
 def delete_image(image_id: int, service: Annotated[ImageService, Depends()]):
     service.delete(image_id)

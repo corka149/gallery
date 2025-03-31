@@ -40,3 +40,15 @@ msgstr ""
 
 msgid "Image"
 msgstr ""
+
+msgid "Edit image"
+msgstr ""
+
+msgid "Only place a image when you want to change it."
+msgstr ""
+
+msgid "Current image"
+msgstr ""
+
+msgid "Save image"
+msgstr ""

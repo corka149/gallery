@@ -3,7 +3,7 @@ import os
 import shutil
 from datetime import datetime
 from os import path
-from typing import Annotated
+from typing import Annotated, Optional
 from uuid import uuid4
 
 from argon2 import PasswordHasher
@@ -31,18 +31,18 @@ class ImageService:
         result = self.session.exec(statement)
         return result.all()
 
-    def save(self, image: db.Image, image_file: UploadFile):
-        thumbnail_img_path = ""
+    def save(self, image: db.Image, image_file: Optional[UploadFile]):
         img_path = ""
+        thumbnail_img_path = ""
 
-        if image_file.filename:
+        if image_file and image_file.filename != "":
             uuid = uuid4()
             image_dir = path.join(self.config.image_directory, str(uuid))
 
             logging.info(f"Saving image to {image_dir}")
 
             os.makedirs(image_dir, exist_ok=True)
-            # tempfile.SpooledTemporaryFile
+            
             thumbnail_img_path = path.join(image_dir, "thumbnail.jpg")
             img_path = path.join(image_dir, image_file.filename)
 
@@ -56,8 +56,12 @@ class ImageService:
                 thumbnail_img.thumbnail(new_size)
                 thumbnail_img.save(thumbnail_img_path)
 
-        image.url = img_path
-        image.thumbnail_url = thumbnail_img_path
+        if img_path:
+            image.url = img_path
+            
+        if thumbnail_img_path:
+            image.thumbnail_url = thumbnail_img_path
+            
         image.created_at = image.created_at or datetime.now()
         image.updated_at = datetime.now()
 

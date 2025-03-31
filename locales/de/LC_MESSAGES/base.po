@@ -21,7 +21,7 @@ msgid "Delete"
 msgstr "Löschen"
 
 msgid "Add Image"
-msgstr "Bild hinzufügen"
+msgstr "Füge neues Bild hinzu"
 
 msgid "Login"
 msgstr "Anmelden"
@@ -40,3 +40,15 @@ msgstr "Makierungen"
 
 msgid "Image"
 msgstr "Bild"
+
+msgid "Edit image"
+msgstr "Editiere Bild"
+
+msgid "Only place a image when you want to change it."
+msgstr "Platziere nur ein neues Bild, wenn das aktuelle Bild ausgetauscht werden soll."
+
+msgid "Current image"
+msgstr "Aktuelles Bild"
+
+msgid "Save image"
+msgstr "Bild speichern"
