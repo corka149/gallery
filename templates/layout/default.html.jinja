@@ -11,7 +11,7 @@
 </head>
 
 <body>
-  <div id="content" class="h-screen flex flex-col justify-between">
+  <div id="content" class="min-h-screen flex flex-col justify-between">
 
     <div class="bg-amber-400 flex justify-center" style="min-height: 10vh">
       <!-- Navbar -->
@@ -36,7 +36,7 @@
       {% endblock %}
     </div>
 
-    <main class="mx-auto max-w-xl mt-4" style="min-height: 80vh">
+    <main class="mx-auto max-w-xl mt-4 pb-4" style="min-height: 80vh">
       <!-- Content -->
       {% block content %}{% endblock %}
     </main>

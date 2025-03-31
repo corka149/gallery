@@ -1,7 +1,7 @@
 {% extends "layout/default.html.jinja" %} {% block content %}
 <div>
   <h1 class="text-center text-xl md:text-4xl my-4 font-bold">
-    {{ _("Edit image") }} {{ image.title }}
+    {{ _("Edit image") }} <span class="italic">{{ image.title }}</span>
   </h1>
   <form action="/images/{{image.id}}/edit" method="post" enctype="multipart/form-data">
     <div class="grid grid-cols-1 gap-4">

@@ -24,7 +24,7 @@ class ImageService:
     def get_image(self, image_id):
         statement = select(db.Image).where(db.Image.id == image_id)
         result = self.session.exec(statement)
-        return result.one()
+        return result.one_or_none()
 
     def get_images(self):
         statement = select(db.Image)
