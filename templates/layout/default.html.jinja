@@ -1,58 +1,94 @@
 <!DOCTYPE html>
 <html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <link
+      rel="shortcut icon"
+      type="image/ico"
+      href="{{ url_for('static', path='/img/favicon.ico') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', path='/css/styles.css') }}"
+    />
+    <title>Gallery</title>
+  </head>
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#000000" />
-  <link rel="shortcut icon" type="image/ico" href="{{ url_for('static', path='/img/favicon.ico') }}" />
-  <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}">
-  <title>Gallery</title>
-</head>
-
-<body>
-  <div id="content" class="min-h-screen flex flex-col justify-between">
-
-    <div class="bg-amber-400 flex justify-center" style="min-height: 10vh">
-      <!-- Navbar -->
-      {%block navbar %}
-      <nav class="flex items-center justify-between w-1/2 mx-4">
-        <img src="{{ url_for('static', path='/img/logo.png') }}" alt="Sun rises behind a mountain" class="max-h-24" />
-        <span class="text-center text-xl my-4 font-bold italic text-amber-900">
-          <a href="/">Gallery</a>
-        </span>
-        <ul class="flex space-x-4">
-          <li>
-            <a href="/images/add" class="underline text-amber-900">{{_("Add Image")}}</a>
-          </li>
-          <li>
-            <a href="/login" class="underline text-amber-900">{{_("Login")}}</a>
-          </li>
-          <li>
-            <a href="/logout" class="underline text-amber-900">{{_("Logout")}}</a>
-          </li>
-        </ul>
-      </nav>
-      {% endblock %}
-    </div>
-
-    <main class="mx-auto max-w-xl mt-4 pb-4" style="min-height: 80vh">
-      <!-- Content -->
-      {% block content %}{% endblock %}
-    </main>
-      
-    <div class="bg-gray-500" style="min-height: 5vh">
-      <!-- Footer -->
-      {% block footer %}
-      <div class="mx-auto max-w-xl">
-        <footer>
-          <p>Footer</p>
-        </footer>
+  <body>
+    <div id="content" class="min-h-screen flex flex-col justify-between">
+      <div class="bg-amber-400 flex justify-center" style="min-height: 10vh">
+        <!-- Navbar -->
+        {%block navbar %}
+        <nav class="flex items-center justify-between w-1/2 mx-4">
+          <img
+            src="{{ url_for('static', path='/img/logo.png') }}"
+            alt="Sun rises behind a mountain"
+            class="max-h-24"
+          />
+          <span
+            class="text-center text-xl my-4 font-bold italic text-amber-900"
+          >
+            <a href="/">Gallery</a>
+          </span>
+          <ul class="flex space-x-4">
+            {# with auth #}
+            {% if is_authenticated %}
+            <li>
+              <a href="/images/add" class="underline text-amber-900">{{
+                _("Add Image")
+              }}</a>
+            </li>
+            <li>
+              <a href="/logout" class="underline text-amber-900">{{
+                _("Logout")
+              }}</a>
+            </li>
+            {# without auth #}
+            {% else %}
+            <li>
+              <a href="/login" class="underline text-amber-900">{{
+                _("Login")
+              }}</a>
+            </li>
+            {% endif %}
+          </ul>
+        </nav>
+        {% endblock %}
       </div>
-      {% endblock %}
+
+      <main class="mx-auto max-w-xl mt-4 pb-4" style="min-height: 80vh">
+        <!-- messages -->
+        {% if messages %}
+        <div class="bg-green-200 text-green-800 p-4 rounded-lg mb-4">
+          {% for message in messages %}
+          <p>{{ message }}</p>
+          {% endfor %}
+        </div>
+        {% endif %}
+        <!-- errors -->
+        {% if errors %}
+        <div class="bg-red-200 text-red-800 p-4 rounded-lg mb-4">
+          {% for error in errors %}
+          <p>{{ error }}</p>
+          {% endfor %}
+        </div>
+        {% endif %}
+        <!-- content -->
+        {% block content %}{% endblock %}
+      </main>
+
+      <div class="bg-gray-500" style="min-height: 5vh">
+        <!-- Footer -->
+        {% block footer %}
+        <div class="mx-auto max-w-xl">
+          <footer>
+            <p>Footer</p>
+          </footer>
+        </div>
+        {% endblock %}
+      </div>
     </div>
-
-  </div>
-</body>
-
+  </body>
 </html>

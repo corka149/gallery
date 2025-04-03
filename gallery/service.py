@@ -90,7 +90,7 @@ class UserService:
     def get_user(self, username: str):
         statement = select(db.User).where(db.User.username == username)
         result = self.session.exec(statement)
-        return result.one()
+        return result.one_or_none()
 
     def save(self, user: db.User, password: str = None):
         if password:

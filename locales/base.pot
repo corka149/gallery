@@ -55,3 +55,9 @@ msgstr ""
 
 msgid "Save image"
 msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "Invalid username or password"
+msgstr ""

@@ -52,3 +52,6 @@ msgstr "Aktuelles Bild"
 
 msgid "Save image"
 msgstr "Bild speichern"
+
+msgid "Invalid username or password"
+msgstr "Ungültiger Benutzername oder Password"

@@ -14,7 +14,7 @@
           type="text"
           id="title"
           name="title"
-          class="w-full"
+          class="w-full border border-gray-300 rounded-md"
           value="{{ image.title }}"
           required
         />
@@ -27,7 +27,7 @@
         <textarea
           id="description"
           name="description"
-          class="w-full"
+          class="w-full border border-gray-300 rounded-md"
           required
         >{{ image.description }}</textarea>
       </div>
@@ -40,7 +40,7 @@
           type="text"
           id="tags"
           name="tags"
-          class="w-full"
+          class="w-full border border-gray-300 rounded-md"
           value="{{ image.tags }}"
           required
         />
@@ -61,7 +61,7 @@
         <label class="font-bold text-gray-500" for="image">{{
           _("Image")
         }}</label>
-        <input type="file" id="image" name="image" class="w-full" />
+        <input type="file" id="image" name="image" class="w-full border border-gray-300 rounded-md" />
         <div>{{_("Only place a image when you want to change it.")}}</div>
       </div>
       <!-- Submit -->

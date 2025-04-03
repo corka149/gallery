@@ -2,8 +2,7 @@ import gettext
 from typing import Annotated
 
 import uvicorn
-from fastapi import (Depends, FastAPI, File, Form, Request, UploadFile,
-                     responses, status)
+from fastapi import Depends, FastAPI, File, Form, Request, UploadFile, responses, status
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -59,12 +58,24 @@ class TemplateRenderer:
         )
 
 
+def is_authenticated(request: Request, auth: Annotated[Auth, Depends()]):
+    token = request.cookies.get("gallery")
+
+    if token:
+        return auth.verify_token(token)
+    return False
+
+
 @app.get("/", response_class=HTMLResponse)
 def home(
     service: Annotated[ImageService, Depends()],
     renderer: Annotated[TemplateRenderer, Depends()],
+    is_authenticated: Annotated[bool, Depends(is_authenticated)],
 ):
-    images = service.get_images()
+    images = []
+
+    if is_authenticated:
+        images = service.get_images()
 
     for image in images:
         image.url = image.url.replace(config.image_directory, config.gallery_endpoint)
@@ -85,10 +96,12 @@ def login(
     username: Annotated[str, Form()],
     password: Annotated[str, Form()],
     auth: Annotated[Auth, Depends()],
+    renderer: Annotated[TemplateRenderer, Depends()],
 ):
     if not auth.verify(username, password):
-        return responses.RedirectResponse(
-            url="/login", status_code=status.HTTP_302_FOUND
+        return renderer.render(
+            name="login.html.jinja",
+            context={"errors": [_("Invalid username or password")]},
         )
 
     response = responses.RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
@@ -117,7 +130,11 @@ def logout():
 @app.get("/images/add", response_class=HTMLResponse)
 def add_image(
     renderer: Annotated[TemplateRenderer, Depends()],
+    is_authenticated: Annotated[bool, Depends(is_authenticated)],
 ):
+    if not is_authenticated:
+        return responses.RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
+    
     return renderer.render(name="add_image.html.jinja", context={})
 
 
@@ -128,7 +145,11 @@ def create_image(
     description: Annotated[str, Form()],
     tags: Annotated[str, Form()],
     service: Annotated[ImageService, Depends()],
+    is_authenticated: Annotated[bool, Depends(is_authenticated)],
 ):
+    if not is_authenticated:
+        return responses.RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
+    
     imageData = db.Image(
         title=title,
         description=description,
@@ -145,7 +166,11 @@ def edit_image(
     image_id: int,
     renderer: Annotated[TemplateRenderer, Depends()],
     service: Annotated[ImageService, Depends()],
+    is_authenticated: Annotated[bool, Depends(is_authenticated)],
 ):
+    if not is_authenticated:
+        return responses.RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
+    
     image = service.get_image(image_id)
     image.url = image.url.replace(config.image_directory, config.gallery_endpoint)
     image.thumbnail_url = image.thumbnail_url.replace(
@@ -163,9 +188,13 @@ def update_image(
     description: Annotated[str, Form()],
     tags: Annotated[str, Form()],
     service: Annotated[ImageService, Depends()],
+    is_authenticated: Annotated[bool, Depends(is_authenticated)],
 ):
-    imageData = service.get_image(image_id)
+    if not is_authenticated:
+        return responses.RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
     
+    imageData = service.get_image(image_id)
+
     imageData.title = title
     imageData.description = description
     imageData.tags = tags
@@ -176,7 +205,14 @@ def update_image(
 
 
 @app.get("/images/{image_id}/delete", response_class=HTMLResponse)
-def delete_image(image_id: int, service: Annotated[ImageService, Depends()]):
+def delete_image(
+    image_id: int,
+    service: Annotated[ImageService, Depends()],
+    is_authenticated: Annotated[bool, Depends(is_authenticated)],
+):
+    if not is_authenticated:
+        return responses.RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
+    
     service.delete(image_id)
     return responses.RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
 
