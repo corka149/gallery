@@ -55,3 +55,6 @@ msgstr "Bild speichern"
 
 msgid "Invalid username or password"
 msgstr "Ungültiger Benutzername oder Password"
+
+msgid "All rights reserved."
+msgstr "Alle Rechte vorbehalten."

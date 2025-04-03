@@ -55,3 +55,6 @@ msgstr ""
 
 msgid "Invalid username or password"
 msgstr ""
+
+msgid "All rights reserved."
+msgstr ""

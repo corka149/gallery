@@ -1,3 +1,4 @@
+from datetime import datetime
 import gettext
 from typing import Annotated
 
@@ -47,6 +48,7 @@ class TemplateRenderer:
     def render(self, name: str, context: dict):
         context["_"] = _
         context["is_authenticated"] = False
+        context["year"] = datetime.now().year
         if self.request.cookies.get("gallery"):
             token = self.request.cookies.get("gallery")
             username = self.auth.verify_token(token)
