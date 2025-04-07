@@ -58,3 +58,6 @@ msgstr ""
 
 msgid "All rights reserved."
 msgstr ""
+
+msgid "No images found"
+msgstr ""

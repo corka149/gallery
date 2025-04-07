@@ -32,11 +32,6 @@ app.mount(
     name="images",
 )
 
-# Set up translations
-language_translations = gettext.translation("base", "locales", languages=["de", "en"])
-language_translations.install()
-_ = language_translations.gettext
-
 templates = Jinja2Templates(directory="templates")
 
 
@@ -44,9 +39,16 @@ class TemplateRenderer:
     def __init__(self, request: Request, auth: Annotated[Auth, Depends()]):
         self.auth = auth
         self.request = request
+        lang = self.request.query_params.get("lang") or self.request.headers.get("accept-language")
+        
+        if not lang:
+            lang = "de"
+            
+        self.language_translations = gettext.translation("base", "locales", languages=[lang])
 
     def render(self, name: str, context: dict):
-        context["_"] = _
+        
+        context["_"] = self.translate
         context["is_authenticated"] = False
         context["year"] = datetime.now().year
         if self.request.cookies.get("gallery"):
@@ -58,6 +60,9 @@ class TemplateRenderer:
         return templates.TemplateResponse(
             request=self.request, name=name, context=context
         )
+        
+    def translate(self, message: str):
+        return self.language_translations.gettext(message)
 
 
 def is_authenticated(request: Request, auth: Annotated[Auth, Depends()]):
@@ -101,9 +106,11 @@ def login(
     renderer: Annotated[TemplateRenderer, Depends()],
 ):
     if not auth.verify(username, password):
+        error = renderer.translate("Invalid username or password")
+        
         return renderer.render(
             name="login.html.jinja",
-            context={"errors": [_("Invalid username or password")]},
+            context={"errors": [error]},
         )
 
     response = responses.RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)

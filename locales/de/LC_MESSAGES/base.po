@@ -58,3 +58,6 @@ msgstr "Ungültiger Benutzername oder Password"
 
 msgid "All rights reserved."
 msgstr "Alle Rechte vorbehalten."
+
+msgid "No images found"
+msgstr "Keine Bilder gefunden"
