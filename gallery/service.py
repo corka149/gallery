@@ -1,7 +1,7 @@
 import logging
 import os
 import shutil
-from datetime import datetime
+from datetime import datetime, timedelta
 from os import path
 from typing import Annotated, Optional
 from uuid import uuid4
@@ -139,10 +139,17 @@ class AuthService:
             return False
 
     def generate_token(self, username: str) -> str:
-        return self.serializer.dumps(username)
+        now = datetime.now()
+        now += timedelta(hours=2)
+        data = (username, now.timestamp())
+        return self.serializer.dumps(data)
 
     def verify_token(self, token: str) -> str:
         try:
-            return self.serializer.loads(token)
+            (username, created_at) = self.serializer.loads(token)
+            if created_at < datetime.now().timestamp():
+                return None
+            
+            return username
         except Exception:
             return None
