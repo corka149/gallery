@@ -8,6 +8,10 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
+
 import alembic.config
 import gallery.config as config
 import gallery.db as db
@@ -24,6 +28,7 @@ alembic.config.main(
     ]
 )
 
+# Initialize app
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 app.mount(
@@ -31,6 +36,11 @@ app.mount(
     StaticFiles(directory=config.image_directory),
     name="images",
 )
+
+# Rate limiting
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 templates = Jinja2Templates(directory="templates")
 
@@ -99,7 +109,9 @@ def login_form(renderer: Annotated[TemplateRenderer, Depends()]):
 
 
 @app.post("/login", response_class=HTMLResponse)
+@limiter.limit("5/minute")
 def login(
+    request: Request,
     username: Annotated[str, Form()],
     password: Annotated[str, Form()],
     auth: Annotated[Auth, Depends()],

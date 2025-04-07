@@ -14,6 +14,7 @@ dependencies = [
     "pillow>=11.1.0",
     "psycopg[binary,pool]>=3.2.5",
     "python-multipart>=0.0.20",
+    "slowapi>=0.1.9",
     "sqlalchemy>=2.0.38",
     "sqlmodel>=0.0.24",
     "starlette>=0.46.0",
