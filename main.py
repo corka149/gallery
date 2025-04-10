@@ -164,7 +164,7 @@ def create_image(
     image: Annotated[UploadFile, File()],
     title: Annotated[str, Form()],
     description: Annotated[str, Form()],
-    tags: Annotated[str, Form()],
+    category: Annotated[str, Form()],
     service: Annotated[ImageService, Depends()],
     is_authenticated: Annotated[bool, Depends(is_authenticated)],
 ):
@@ -174,7 +174,7 @@ def create_image(
     imageData = db.Image(
         title=title,
         description=description,
-        tags=tags,
+        category=category,
     )
 
     service.save(imageData, image)
@@ -207,7 +207,7 @@ def update_image(
     image: Annotated[UploadFile, File()],
     title: Annotated[str, Form()],
     description: Annotated[str, Form()],
-    tags: Annotated[str, Form()],
+    category: Annotated[str, Form()],
     service: Annotated[ImageService, Depends()],
     is_authenticated: Annotated[bool, Depends(is_authenticated)],
 ):
@@ -218,7 +218,7 @@ def update_image(
 
     imageData.title = title
     imageData.description = description
-    imageData.tags = tags
+    imageData.category = category
 
     service.save(imageData, image)
 

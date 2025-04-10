@@ -35,8 +35,8 @@ msgstr "Titel"
 msgid "Description"
 msgstr "Beschreibung"
 
-msgid "Tags"
-msgstr "Makierungen"
+msgid "Category"
+msgstr "Kategorie"
 
 msgid "Image"
 msgstr "Bild"

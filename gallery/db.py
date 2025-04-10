@@ -26,7 +26,7 @@ class Image(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     title: str
     description: Optional[str] = None
-    tags: str
+    category: str
     url: str
     thumbnail_url: Optional[str] = None
     created_at: datetime
