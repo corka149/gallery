@@ -1,16 +1,14 @@
-
 import uvicorn
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-
 from slowapi import Limiter, _rate_limit_exceeded_handler
-from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
 
 import alembic.config
+import gallery.api as api
 import gallery.config as config
 import gallery.db as db
-import gallery.api as api
 
 gallery_config = config.get_config()
 db.init(gallery_config)

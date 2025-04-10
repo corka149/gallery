@@ -12,9 +12,9 @@ from itsdangerous import URLSafeSerializer
 from PIL import Image
 from sqlmodel import Session, select
 
-from gallery import dto
 import gallery.config as config
 import gallery.db as db
+from gallery import dto
 
 
 class ImageService:

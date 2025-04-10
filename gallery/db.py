@@ -16,7 +16,7 @@ def init(config: config.Config) -> None:
 
 def session():
     s = Session(engine)
-    
+
     try:
         yield s
     finally:

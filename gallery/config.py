@@ -44,7 +44,5 @@ def get_config():
             secret_token=os.getenv("AUTH_SECRET_TOKEN", "mysecret"),
             salt=os.getenv("AUTH_SALT", "mysalt"),
         ),
-        mode=ReleaseMode(
-            os.getenv("RELEASE_MODE", ReleaseMode.DEV.value)
-        ),
+        mode=ReleaseMode(os.getenv("RELEASE_MODE", ReleaseMode.DEV.value)),
     )
