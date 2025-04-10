@@ -29,7 +29,11 @@
         <label class="font-bold text-gray-500" for="category">{{
           _("Category")
         }}</label>
-        <input type="text" id="category" name="category" class="w-full border border-gray-300 rounded-md" required />
+        <select name="category" id="category" required class="w-full border border-gray-300 rounded-md">
+          {% for category in categories %}
+            <option value="{{ category.value }}">{{ _(category.value) }}</option>
+          {% endfor %}
+        </select>
       </div>
       <!-- Image -->
       <div>

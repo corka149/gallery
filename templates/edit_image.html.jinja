@@ -36,14 +36,15 @@
         <label class="font-bold text-gray-500" for="category">{{
           _("Category")
         }}</label>
-        <input
-          type="text"
-          id="category"
-          name="category"
-          class="w-full border border-gray-300 rounded-md"
-          value="{{ image.category }}"
-          required
-        />
+        <select name="category" id="category" required class="w-full border border-gray-300 rounded-md">
+          {% for category in categories %}
+            {% if category.value == image.category %} <!-- Check if the category is the same as the current image's category -->
+              <option value="{{ category.value }}" selected>{{ _(category.value) }}</option>
+            {% else %}
+              <option value="{{ category.value }}">{{ _(category.value) }}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
       </div>
       <!-- Current image -->
         <div>

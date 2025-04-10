@@ -61,3 +61,39 @@ msgstr "Alle Rechte vorbehalten."
 
 msgid "No images found"
 msgstr "Keine Bilder gefunden"
+
+msgid "grief"
+msgstr "Trauer"
+
+msgid "love"
+msgstr "Liebe"
+
+msgid "friendship"
+msgstr "Freundschaft"
+
+msgid "family"
+msgstr "Familie"
+
+msgid "party"
+msgstr "Feier"
+
+msgid "work"
+msgstr "Arbeit"
+
+msgid "marriage"
+msgstr "Hochzeit"
+
+msgid "mothers_day"
+msgstr "Muttertag"
+
+msgid "birthday"
+msgstr "Geburtstag"
+
+msgid "eastern"
+msgstr "Ostern"
+
+msgid "christmas"
+msgstr "Weihnachten"
+
+msgid "anniversary"
+msgstr "Jubiläum"

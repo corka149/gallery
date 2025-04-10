@@ -61,3 +61,39 @@ msgstr ""
 
 msgid "No images found"
 msgstr ""
+
+msgid "grief"
+msgstr ""
+
+msgid "love"
+msgstr ""
+
+msgid "friendship"
+msgstr ""
+
+msgid "family"
+msgstr ""
+
+msgid "party"
+msgstr ""
+
+msgid "work"
+msgstr ""
+
+msgid "marriage"
+msgstr ""
+
+msgid "mothers_day"
+msgstr ""
+
+msgid "birthday"
+msgstr ""
+
+msgid "eastern"
+msgstr ""
+
+msgid "christmas"
+msgstr ""
+
+msgid "anniversary"
+msgstr ""

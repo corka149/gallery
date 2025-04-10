@@ -156,7 +156,7 @@ def add_image(
     if not is_authenticated:
         return responses.RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
     
-    return renderer.render(name="add_image.html.jinja", context={})
+    return renderer.render(name="add_image.html.jinja", context={"categories": db.Category})
 
 
 @app.post("/images/add", response_class=HTMLResponse)
@@ -198,7 +198,7 @@ def edit_image(
         config.image_directory, config.gallery_endpoint
     )
 
-    return renderer.render(name="edit_image.html.jinja", context={"image": image})
+    return renderer.render(name="edit_image.html.jinja", context={"image": image, "categories": db.Category})
 
 
 @app.post("/images/{image_id}/edit", response_class=HTMLResponse)

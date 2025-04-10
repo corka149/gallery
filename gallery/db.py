@@ -1,4 +1,5 @@
 from datetime import datetime
+from enum import Enum
 from typing import Optional
 
 from sqlmodel import Field, Session, SQLModel, create_engine
@@ -20,6 +21,21 @@ def session():
         yield s
     finally:
         s.close()
+
+
+class Category(str, Enum):
+    GRIEF = "grief"
+    LOVE = "love"
+    FRIENDSHIP = "friendship"
+    FAMILY = "family"
+    PARTY = "party"
+    WORK = "work"
+    MARRIAGE = "marriage"
+    MOTHERS_DAY = "mothers_day"
+    BIRTHDAY = "birthday"
+    EASTERN = "eastern"
+    CHRISTMAS = "christmas"
+    ANNIVERSARY = "anniversary"
 
 
 class Image(SQLModel, table=True):
