@@ -13,7 +13,7 @@ from gallery.service import ImageService, AuthService as Auth
 from gallery.templates import TemplateRenderer
 
 
-PAGE_SIZE = 1
+PAGE_SIZE = 20
 
 
 def is_authenticated(request: Request, auth: Annotated[Auth, Depends()]):
