@@ -3,7 +3,7 @@ import os
 import shutil
 from datetime import datetime, timedelta
 from os import path
-from typing import Annotated, Optional
+from typing import Annotated, List, Optional
 from uuid import uuid4
 
 from argon2 import PasswordHasher
@@ -12,6 +12,7 @@ from itsdangerous import URLSafeSerializer
 from PIL import Image
 from sqlmodel import Session, select
 
+from gallery import dto
 import gallery.config as config
 import gallery.db as db
 
@@ -42,7 +43,7 @@ class ImageService:
             logging.info(f"Saving image to {image_dir}")
 
             os.makedirs(image_dir, exist_ok=True)
-            
+
             thumbnail_img_path = path.join(image_dir, "thumbnail.jpg")
             img_path = path.join(image_dir, image_file.filename)
 
@@ -58,10 +59,10 @@ class ImageService:
 
         if img_path:
             image.url = img_path
-            
+
         if thumbnail_img_path:
             image.thumbnail_url = thumbnail_img_path
-            
+
         image.created_at = image.created_at or datetime.now()
         image.updated_at = datetime.now()
 
@@ -80,6 +81,55 @@ class ImageService:
         shutil.rmtree(path.dirname(image.url))
 
         return image
+
+    def get_image_page(self, page_no: int, page_size: int, category: str):
+        statement = (
+            select(db.Image).where(db.Image.category == category)
+            if category
+            else select(db.Image)
+        )
+
+        result = self.session.exec(statement)
+        images = result.all()
+
+        total = len(images)
+        total_pages = (total + page_size - 1) // page_size
+        has_next = page_no < total_pages
+        has_previous = page_no > 1
+
+        start_index = (page_no - 1) * page_size
+        end_index = start_index + page_size
+        images = images[start_index:end_index]
+
+        content: List[dto.ImageDTO] = []
+
+        for image in images:
+            image.url = image.url.replace(
+                self.config.image_directory, self.config.gallery_endpoint
+            )
+            image.thumbnail_url = image.thumbnail_url.replace(
+                self.config.image_directory, self.config.gallery_endpoint
+            )
+
+            content.append(
+                dto.ImageDTO(
+                    title=image.title,
+                    description=image.description,
+                    category=image.category,
+                    image_url=image.url,
+                    thumbnail_url=image.thumbnail_url,
+                )
+            )
+
+        return {
+            "page_no": page_no,
+            "page_size": page_size,
+            "total": total,
+            "total_pages": total_pages,
+            "has_next": has_next,
+            "has_previous": has_previous,
+            "content": content,
+        }
 
 
 class UserService:
@@ -149,7 +199,7 @@ class AuthService:
             (username, created_at) = self.serializer.loads(token)
             if created_at < datetime.now().timestamp():
                 return None
-            
+
             return username
         except Exception:
             return None

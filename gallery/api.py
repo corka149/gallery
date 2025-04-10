@@ -1,3 +1,4 @@
+import logging
 from typing import Annotated
 
 from fastapi import Depends, FastAPI, File, Form, Request, UploadFile, responses, status
@@ -5,10 +6,14 @@ from fastapi.responses import HTMLResponse
 from slowapi import Limiter
 
 
+from gallery import dto
 from gallery.config import Config
 import gallery.db as db
 from gallery.service import ImageService, AuthService as Auth
 from gallery.templates import TemplateRenderer
+
+
+PAGE_SIZE = 1
 
 
 def is_authenticated(request: Request, auth: Annotated[Auth, Depends()]):
@@ -174,3 +179,28 @@ def configure(app: FastAPI, limiter: Limiter, config: Config):
         
         service.delete(image_id)
         return responses.RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
+
+
+    @app.get("/images/gallery")
+    @limiter.limit("30/minute")
+    def get_gallery(
+        request: Request,
+        service: Annotated[ImageService, Depends()],
+        page: int = 1,
+        category: str = "",
+    ) -> dto.Page:
+        try:
+            return service.get_image_page(page, PAGE_SIZE, category)
+        except Exception as e:
+            logging.error(f"Error fetching images: {e}")
+            
+            return dto.Page(
+                page_no=1,
+                page_size=0,
+                total=0,
+                total_pages=0,
+                has_next=False,
+                has_previous=False,
+                content=[],
+            )
+        

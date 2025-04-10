@@ -1,0 +1,4 @@
+# page and category
+
+GET http://localhost:8000/images/gallery?category=love
+Accept: application/json
