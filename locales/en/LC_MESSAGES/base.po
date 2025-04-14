@@ -97,3 +97,9 @@ msgstr ""
 
 msgid "anniversary"
 msgstr ""
+
+msgid "Username"
+msgstr ""
+
+msgid "Password"
+msgstr ""

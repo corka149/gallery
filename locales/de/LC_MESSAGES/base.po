@@ -54,7 +54,7 @@ msgid "Save image"
 msgstr "Bild speichern"
 
 msgid "Invalid username or password"
-msgstr "Ungültiger Benutzername oder Password"
+msgstr "Ungültiger Benutzername oder Passwort"
 
 msgid "All rights reserved."
 msgstr "Alle Rechte vorbehalten."
@@ -97,3 +97,9 @@ msgstr "Weihnachten"
 
 msgid "anniversary"
 msgstr "Jubiläum"
+
+msgid "Username"
+msgstr "Benutzername"
+
+msgid "Password"
+msgstr "Passwort"

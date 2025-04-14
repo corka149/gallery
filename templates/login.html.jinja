@@ -1,9 +1,13 @@
 {% extends "layout/default.html.jinja" %} {% block content %}
 <div>
-  <h1 class="text-center text-xl md:text-4xl my-4 font-bold">Login</h1>
+  <h1 class="text-center text-xl md:text-4xl my-4 font-bold">
+    {{ _("Login") }}
+  </h1>
   <form action="/login" method="post" class="flex flex-col gap-4">
     <div>
-      <label class="font-bold text-gray-500" for="username">Username</label>
+      <label class="font-bold text-gray-500" for="username">
+        {{ _("Username") }}
+      </label>
       <input
         type="text"
         id="username"
@@ -13,7 +17,9 @@
       />
     </div>
     <div>
-      <label class="font-bold text-gray-500" for="password">Password</label>
+      <label class="font-bold text-gray-500" for="password">
+        {{ _("Password") }}
+      </label>
       <input
         type="password"
         id="password"

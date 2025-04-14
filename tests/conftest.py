@@ -1,12 +1,15 @@
+import pathlib
 import alembic
 from fastapi.testclient import TestClient
 import pytest
 
-from main import app
+from main import app, limiter
 
 
 @pytest.fixture
 def db_setup():
+    limiter.reset()
+    
     alembic.config.main(
         argv=[
             "upgrade",
@@ -28,7 +31,7 @@ def client() -> TestClient:
 
 
 @pytest.fixture
-def db_session():
+def db_session(db_setup):
     import gallery.config as config
     import gallery.db as db
 
@@ -67,7 +70,8 @@ def auth_service(user_service):
 
 
 @pytest.fixture
-def image_dir(tmp_path):
+def image_dir(tmp_path: pathlib.Path):
+    print("tmp_path", type(tmp_path))
     import gallery.config as config
 
     image_dir = tmp_path / "images"

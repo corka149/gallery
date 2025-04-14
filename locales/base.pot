@@ -56,9 +56,6 @@ msgstr ""
 msgid "Save image"
 msgstr ""
 
-msgid "Login"
-msgstr ""
-
 msgid "Invalid username or password"
 msgstr ""
 
@@ -102,4 +99,10 @@ msgid "christmas"
 msgstr ""
 
 msgid "anniversary"
+msgstr ""
+
+msgid "Username"
+msgstr ""
+
+msgid "Password"
 msgstr ""
