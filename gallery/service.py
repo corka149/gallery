@@ -130,6 +130,13 @@ class ImageService:
             "has_previous": has_previous,
             "content": content,
         }
+        
+    def get_categories(self) -> List[str]:
+        statement = select(db.Image.category).distinct()
+        result = self.session.exec(statement)
+        categories = result.all()
+
+        return [category for category in categories]
 
 
 class UserService:

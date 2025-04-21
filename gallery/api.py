@@ -12,7 +12,7 @@ from gallery.service import AuthService as Auth
 from gallery.service import ImageService
 from gallery.templates import TemplateRenderer
 
-PAGE_SIZE = 20
+PAGE_SIZE = 10
 
 
 def is_authenticated(request: Request, auth: Annotated[Auth, Depends()]):
@@ -213,3 +213,16 @@ def configure(app: FastAPI, limiter: Limiter, config: Config):
                 has_previous=False,
                 content=[],
             )
+
+    @app.get("/images/categories")
+    @limiter.limit("30/minute")
+    def get_categories(
+        request: Request,
+        service: Annotated[ImageService, Depends()],
+        renderer: Annotated[TemplateRenderer, Depends()],
+    ) -> list[str]:
+        try:
+            return [renderer.translate(category) for category in service.get_categories()]
+        except Exception as e:
+            logging.error(f"Error fetching categories: {e}")
+            return []
