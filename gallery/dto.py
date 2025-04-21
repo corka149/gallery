@@ -19,3 +19,8 @@ class Page(BaseModel):
     has_next: bool
     has_previous: bool
     content: List[ImageDTO]
+
+
+class CategoryDTO(BaseModel):
+    key: str
+    name: str

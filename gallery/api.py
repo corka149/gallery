@@ -220,9 +220,15 @@ def configure(app: FastAPI, limiter: Limiter, config: Config):
         request: Request,
         service: Annotated[ImageService, Depends()],
         renderer: Annotated[TemplateRenderer, Depends()],
-    ) -> list[str]:
+    ) -> list[dto.CategoryDTO]:
         try:
-            return [renderer.translate(category) for category in service.get_categories()]
+            return [
+                dto.CategoryDTO(
+                    key=category,
+                    name=renderer.translate(category),
+                )
+                for category in service.get_categories()
+            ]
         except Exception as e:
             logging.error(f"Error fetching categories: {e}")
             return []
