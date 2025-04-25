@@ -6,7 +6,7 @@ from gallery.service import ImageService, UserService
 
 
 def test_home_without_auth(client: TestClient):
-    response = client.get("/a/")
+    response = client.get("/b/")
     assert response.is_success
     assert response.headers["content-type"] == "text/html; charset=utf-8"
     assert "Gallery" in response.text
@@ -30,7 +30,7 @@ def test_home_with_auth(
     )
     image = image_service.save(image, None)
 
-    response = client.get("/a/")
+    response = client.get("/b/")
     assert response.is_success
     assert response.headers["content-type"] == "text/html; charset=utf-8"
     assert "Gallery" in response.text
@@ -42,7 +42,7 @@ def test_login_and_logout(client: TestClient, user_service: UserService):
     _login(client, user_service)
 
     # Test logout
-    response = client.get("/a/logout")
+    response = client.get("/b/logout")
     assert response.status_code == 200
     assert response.headers["content-type"] == "text/html; charset=utf-8"
     assert "Anmelden" in response.text
@@ -56,7 +56,7 @@ def test_failed_login(client: TestClient, user_service: UserService):
 
     # Test login
     response = client.post(
-        "/a/login", data={"username": user.username, "password": password + "wrong"}
+        "/b/login", data={"username": user.username, "password": password + "wrong"}
     )
 
     assert response.status_code == 200
@@ -73,7 +73,7 @@ def test_hit_rate_limit(client: TestClient, user_service: UserService):
     # Test login
     for _ in range(6):
         response = client.post(
-            "/a/login", data={"username": user.username, "password": password + "wrong"}
+            "/b/login", data={"username": user.username, "password": password + "wrong"}
         )
 
     assert response.status_code == 429
@@ -98,7 +98,7 @@ def test_delete_image(
     image = image_service.save(image, None)
 
     # Test delete image
-    response = client.get(f"/a/images/{image.id}/delete")
+    response = client.get(f"/b/images/{image.id}/delete")
 
     assert response.status_code == 200
     assert response.headers["content-type"] == "text/html; charset=utf-8"
@@ -108,7 +108,7 @@ def test_delete_image(
 
 
 def test_login_form(client: TestClient):
-    response = client.get("/a/login")
+    response = client.get("/b/login")
     assert response.status_code == 200
     assert response.headers["content-type"] == "text/html; charset=utf-8"
     assert "Anmelden" in response.text
@@ -119,7 +119,7 @@ def test_login_form(client: TestClient):
 def test_add_image_form(client: TestClient, user_service: UserService):
     _login(client, user_service)
 
-    response = client.get("/a/images/add")
+    response = client.get("/b/images/add")
     assert response.status_code == 200
     assert response.headers["content-type"] == "text/html; charset=utf-8"
     assert "Füge neues Bild hinzu" in response.text
@@ -130,7 +130,7 @@ def test_add_image_form(client: TestClient, user_service: UserService):
 
 
 def test_cannot_add_image_without_auth(client: TestClient):
-    response = client.get("/a/images/add")
+    response = client.get("/b/images/add")
     assert response.status_code == 200
     assert response.headers["content-type"] == "text/html; charset=utf-8"
     assert "Anmelden" in response.text
@@ -155,7 +155,7 @@ def test_edit_image_form(
     )
     image = image_service.save(image, None)
 
-    response = client.get(f"/a/images/{image.id}/edit")
+    response = client.get(f"/b/images/{image.id}/edit")
     assert response.status_code == 200
     assert response.headers["content-type"] == "text/html; charset=utf-8"
     assert "Bild speichern" in response.text
@@ -189,7 +189,7 @@ def test_cannot_edit_without_auth(
     )
     image = image_service.save(image, None)
 
-    response = client.get(f"/a/images/{image.id}/edit")
+    response = client.get(f"/b/images/{image.id}/edit")
     assert response.status_code == 200
     assert response.headers["content-type"] == "text/html; charset=utf-8"
     assert "Anmelden" in response.text
@@ -215,7 +215,7 @@ def test_get_gallery(
         )
         image = image_service.save(image, None)
 
-    response = client.get("/a/images/gallery")
+    response = client.get("/b/images/gallery")
     assert response.status_code == 200
     assert response.json()["page_no"] == 1
     assert response.json()["page_size"] == api.PAGE_SIZE
@@ -226,7 +226,7 @@ def test_get_gallery(
     assert len(response.json()["content"]) == api.PAGE_SIZE
     
     # Next page
-    response = client.get("/a/images/gallery?page=2")
+    response = client.get("/b/images/gallery?page=2")
     assert response.status_code == 200
     assert response.json()["page_no"] == 2
     assert response.json()["page_size"] == api.PAGE_SIZE
@@ -245,7 +245,7 @@ def _login(client: TestClient, user_service: UserService):
 
     # Test login
     response = client.post(
-        "/a/login", data={"username": user.username, "password": password}
+        "/b/login", data={"username": user.username, "password": password}
     )
 
     assert response.status_code == 200

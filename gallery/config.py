@@ -39,7 +39,7 @@ def get_config():
             "postgresql+psycopg://myadmin:mypassword@localhost:5432/gallery",
         ),
         image_directory=os.getenv("IMAGE_DIRECTORY", "/var/gallery/images"),
-        gallery_endpoint=os.getenv("GALLERY_ENDPOINT", "/a/gallery/images"),
+        gallery_endpoint=os.getenv("GALLERY_ENDPOINT", "/b/gallery/images"),
         auth=AuthConfig(
             secret_token=os.getenv("AUTH_SECRET_TOKEN", "mysecret"),
             salt=os.getenv("AUTH_SALT", "mysalt"),

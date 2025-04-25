@@ -30,24 +30,24 @@
           <span
             class="text-center text-xl my-4 font-bold italic text-amber-900"
           >
-            <a href="/a/">Gallery</a>
+            <a href="/b/">Gallery</a>
           </span>
           <!-- desktop -->
           <ul class="hidden md:flex space-x-4">
             {# with auth #} {% if is_authenticated %}
             <li>
-              <a href="/a/images/add" class="underline text-amber-900">{{
+              <a href="/b/images/add" class="underline text-amber-900">{{
                 _("Add Image")
               }}</a>
             </li>
             <li>
-              <a href="/a/logout" class="underline text-amber-900">{{
+              <a href="/b/logout" class="underline text-amber-900">{{
                 _("Logout")
               }}</a>
             </li>
             {# without auth #} {% else %}
             <li>
-              <a href="/a/login" class="underline text-amber-900">{{
+              <a href="/b/login" class="underline text-amber-900">{{
                 _("Login")
               }}</a>
             </li>
@@ -80,19 +80,19 @@
         <ul class="flex flex-col items-center justify-center space-y-4 bg-amber-300 py-4">
           {# with auth #} {% if is_authenticated %}
           <li>
-            <a href="/a/images/add" class="underline text-amber-900">{{
+            <a href="/b/images/add" class="underline text-amber-900">{{
               _("Add Image")
             }}</a>
           </li>
           <li>
-            <a href="/a/logout" class="underline text-amber-900">{{
+            <a href="/b/logout" class="underline text-amber-900">{{
               _("Logout")
             }}</a>
           </li>
           {# without auth #}
           {% else %}
           <li>
-            <a href="/a/login" class="underline text-amber-900">{{ _("Login") }}</a>
+            <a href="/b/login" class="underline text-amber-900">{{ _("Login") }}</a>
           </li>
           {% endif %}
         </ul>

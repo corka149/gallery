@@ -23,7 +23,7 @@ alembic.config.main(
 
 # Initialize app
 app = FastAPI(openapi_url=None, docs_url=None, redoc_url=None)
-app.mount("/a/static", StaticFiles(directory="static"), name="static")
+app.mount("/b/static", StaticFiles(directory="static"), name="static")
 app.mount(
     gallery_config.gallery_endpoint,
     StaticFiles(directory=gallery_config.image_directory),

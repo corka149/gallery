@@ -24,7 +24,7 @@ def is_authenticated(request: Request, auth: Annotated[Auth, Depends()]):
 
 
 def configure(app: FastAPI, limiter: Limiter, config: Config):
-    @app.get("/a/", response_class=HTMLResponse)
+    @app.get("/b/", response_class=HTMLResponse)
     def home(
         service: Annotated[ImageService, Depends()],
         renderer: Annotated[TemplateRenderer, Depends()],
@@ -45,11 +45,11 @@ def configure(app: FastAPI, limiter: Limiter, config: Config):
 
         return renderer.render(name="home.html.jinja", context={"images": images})
 
-    @app.get("/a/login", response_class=HTMLResponse)
+    @app.get("/b/login", response_class=HTMLResponse)
     def login_form(renderer: Annotated[TemplateRenderer, Depends()]):
         return renderer.render(name="login.html.jinja", context={})
 
-    @app.post("/a/login", response_class=HTMLResponse)
+    @app.post("/b/login", response_class=HTMLResponse)
     @limiter.limit("5/minute")
     def login(
         request: Request,
@@ -67,7 +67,7 @@ def configure(app: FastAPI, limiter: Limiter, config: Config):
             )
 
         response = responses.RedirectResponse(
-            url="/a/", status_code=status.HTTP_302_FOUND
+            url="/b/", status_code=status.HTTP_302_FOUND
         )
 
         token = auth.generate_token(username)
@@ -83,29 +83,29 @@ def configure(app: FastAPI, limiter: Limiter, config: Config):
 
         return response
 
-    @app.get("/a/logout", response_class=HTMLResponse)
+    @app.get("/b/logout", response_class=HTMLResponse)
     def logout():
         response = responses.RedirectResponse(
-            url="/a/", status_code=status.HTTP_302_FOUND
+            url="/b/", status_code=status.HTTP_302_FOUND
         )
         response.delete_cookie(key="gallery")
         return response
 
-    @app.get("/a/images/add", response_class=HTMLResponse)
+    @app.get("/b/images/add", response_class=HTMLResponse)
     def add_image(
         renderer: Annotated[TemplateRenderer, Depends()],
         is_authenticated: Annotated[bool, Depends(is_authenticated)],
     ):
         if not is_authenticated:
             return responses.RedirectResponse(
-                url="/a/", status_code=status.HTTP_302_FOUND
+                url="/b/", status_code=status.HTTP_302_FOUND
             )
 
         return renderer.render(
             name="add_image.html.jinja", context={"categories": db.Category}
         )
 
-    @app.post("/a/images/add", response_class=HTMLResponse)
+    @app.post("/b/images/add", response_class=HTMLResponse)
     def create_image(
         image: Annotated[UploadFile, File()],
         title: Annotated[str, Form()],
@@ -116,7 +116,7 @@ def configure(app: FastAPI, limiter: Limiter, config: Config):
     ):
         if not is_authenticated:
             return responses.RedirectResponse(
-                url="/a/", status_code=status.HTTP_302_FOUND
+                url="/b/", status_code=status.HTTP_302_FOUND
             )
 
         imageData = db.Image(
@@ -127,9 +127,9 @@ def configure(app: FastAPI, limiter: Limiter, config: Config):
 
         service.save(imageData, image)
 
-        return responses.RedirectResponse(url="/a/", status_code=status.HTTP_302_FOUND)
+        return responses.RedirectResponse(url="/b/", status_code=status.HTTP_302_FOUND)
 
-    @app.get("/a/images/{image_id}/edit", response_class=HTMLResponse)
+    @app.get("/b/images/{image_id}/edit", response_class=HTMLResponse)
     def edit_image(
         image_id: int,
         renderer: Annotated[TemplateRenderer, Depends()],
@@ -138,7 +138,7 @@ def configure(app: FastAPI, limiter: Limiter, config: Config):
     ):
         if not is_authenticated:
             return responses.RedirectResponse(
-                url="/a/", status_code=status.HTTP_302_FOUND
+                url="/b/", status_code=status.HTTP_302_FOUND
             )
 
         image = service.get_image(image_id)
@@ -152,7 +152,7 @@ def configure(app: FastAPI, limiter: Limiter, config: Config):
             context={"image": image, "categories": db.Category},
         )
 
-    @app.post("/a/images/{image_id}/edit", response_class=HTMLResponse)
+    @app.post("/b/images/{image_id}/edit", response_class=HTMLResponse)
     def update_image(
         image_id: int,
         image: Annotated[UploadFile, File()],
@@ -164,7 +164,7 @@ def configure(app: FastAPI, limiter: Limiter, config: Config):
     ):
         if not is_authenticated:
             return responses.RedirectResponse(
-                url="/a/", status_code=status.HTTP_302_FOUND
+                url="/b/", status_code=status.HTTP_302_FOUND
             )
 
         imageData = service.get_image(image_id)
@@ -175,9 +175,9 @@ def configure(app: FastAPI, limiter: Limiter, config: Config):
 
         service.save(imageData, image)
 
-        return responses.RedirectResponse(url="/a/", status_code=status.HTTP_302_FOUND)
+        return responses.RedirectResponse(url="/b/", status_code=status.HTTP_302_FOUND)
 
-    @app.get("/a/images/{image_id}/delete", response_class=HTMLResponse)
+    @app.get("/b/images/{image_id}/delete", response_class=HTMLResponse)
     def delete_image(
         image_id: int,
         service: Annotated[ImageService, Depends()],
@@ -185,13 +185,13 @@ def configure(app: FastAPI, limiter: Limiter, config: Config):
     ):
         if not is_authenticated:
             return responses.RedirectResponse(
-                url="/a/", status_code=status.HTTP_302_FOUND
+                url="/b/", status_code=status.HTTP_302_FOUND
             )
 
         service.delete(image_id)
-        return responses.RedirectResponse(url="/a/", status_code=status.HTTP_302_FOUND)
+        return responses.RedirectResponse(url="/b/", status_code=status.HTTP_302_FOUND)
 
-    @app.get("/a/images/gallery")
+    @app.get("/b/images/gallery")
     @limiter.limit("30/minute")
     def get_gallery(
         request: Request,
@@ -214,7 +214,7 @@ def configure(app: FastAPI, limiter: Limiter, config: Config):
                 content=[],
             )
 
-    @app.get("/a/images/categories")
+    @app.get("/b/images/categories")
     @limiter.limit("30/minute")
     def get_categories(
         request: Request,
