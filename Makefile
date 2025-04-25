@@ -10,5 +10,5 @@ test:
 		uv run pytest
 
 build:
-	DOCKER_DEFAULT_PLATFORM=linux/amd64 docker build -t corka149/gallery:1.0.2 .
-	DOCKER_DEFAULT_PLATFORM=linux/amd64 docker push corka149/gallery:1.0.2
+	DOCKER_DEFAULT_PLATFORM=linux/amd64 docker build -t corka149/gallery:1.0.3 .
+	DOCKER_DEFAULT_PLATFORM=linux/amd64 docker push corka149/gallery:1.0.3
