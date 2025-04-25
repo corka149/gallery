@@ -8,3 +8,7 @@ test:
 	RELEASE_MODE="test" \
 	DATABASE_URL="postgresql+psycopg://myadmin:mypassword@localhost:5432/test_gallery" \
 		uv run pytest
+
+build:
+	docker build -t corka149/gallery:1.0.0 .
+	docker push corka149/gallery:1.0.0
