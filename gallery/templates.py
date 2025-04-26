@@ -18,8 +18,10 @@ class TemplateRenderer:
             "accept-language"
         )
 
-        if not lang:
+        if "de" in lang:
             lang = "de"
+        else:
+            lang = "en"
 
         self.language_translations = gettext.translation(
             "base", "locales", languages=[lang]
