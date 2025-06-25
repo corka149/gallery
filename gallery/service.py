@@ -113,6 +113,7 @@ class ImageService:
 
             content.append(
                 dto.ImageDTO(
+                    id=image.id,
                     title=image.title,
                     description=image.description,
                     category=image.category,

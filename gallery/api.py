@@ -24,6 +24,12 @@ def is_authenticated(request: Request, auth: Annotated[Auth, Depends()]):
 
 
 def configure(app: FastAPI, limiter: Limiter, config: Config):
+    @app.get("/", response_class=HTMLResponse)
+    def root():
+        return responses.RedirectResponse(
+            url="/b/", status_code=status.HTTP_302_FOUND
+        )
+    
     @app.get("/b/", response_class=HTMLResponse)
     def home(
         service: Annotated[ImageService, Depends()],

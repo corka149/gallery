@@ -18,7 +18,7 @@ class TemplateRenderer:
             "accept-language"
         )
 
-        if "de" in lang:
+        if lang and "de" in lang:
             lang = "de"
         else:
             lang = "en"
